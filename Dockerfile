@@ -19,12 +19,10 @@ RUN wget -q -O - https://artifacts.elastic.co/downloads/elasticsearch/elasticsea
  |  tar -zx \
  && mv kibana-${KIBANA_VERSION}-linux-x86_64 kibana \
  && rm -f kibana/node/bin/node kibana/node/bin/npm \
- && which npm \
- && which node \
  && ln -s $(which node) kibana/node/bin/node \
  && ln -s $(which npm) kibana/node/bin/npm \
- && npm install http-server
 
+RUN kibana/node/bin/npm install http-server
 RUN git clone --depth=1 https://github.com/mobz/elasticsearch-head.git
 
 CMD sh elasticsearch/bin/elasticsearch -E http.host=0.0.0.0 --quiet & kibana/bin/kibana --host 0.0.0.0 -Q & node_modules/.bin/http-server elasticsearch-head/_site -p 9100
