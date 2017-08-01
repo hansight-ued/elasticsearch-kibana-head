@@ -116,13 +116,13 @@ RUN git clone --depth=1 https://github.com/mobz/elasticsearch-head.git
 
 RUN echo $'\n\nhttp.host: 0.0.0.0\nhttp.cors.enabled: true\nhttp.cors.allow-origin: "*"\nhttp.cors.allow-headers: Authorization\n' >> elasticsearch/config/elasticsearch.yml
 
-RUN elasticsearch/bin/elasticsearch-plugin install x-pack --batch
-
 RUN rm -f kibana/node/bin/node kibana/node/bin/npm \
  && ln -s $(which node) kibana/node/bin/node \
  && ln -s $(which npm) kibana/node/bin/npm
 
-RUN kibana/bin/kibana-plugin install x-pack
+# RUN kibana/bin/kibana-plugin install x-pack
+
+# RUN elasticsearch/bin/elasticsearch-plugin install x-pack --batch
 
 CMD sh elasticsearch/bin/elasticsearch --quiet & kibana/bin/kibana --host 0.0.0.0 -Q & node_modules/.bin/http-server elasticsearch-head/_site -p 9100
 
