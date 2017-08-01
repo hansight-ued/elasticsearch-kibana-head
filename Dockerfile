@@ -48,7 +48,9 @@ RUN wget -q -O - https://artifacts.elastic.co/downloads/elasticsearch/elasticsea
 RUN npm install http-server
 RUN git clone --depth=1 https://github.com/mobz/elasticsearch-head.git
 
-CMD sh elasticsearch/bin/elasticsearch -E http='{host:0.0.0.0,cors.enabled:true,cors.allow-origin:*}' --quiet & kibana/bin/kibana --host 0.0.0.0 -Q & node_modules/.bin/http-server elasticsearch-head/_site -p 9100
+RUN echo $'http.host:0.0.0.0\nhttp.cors.enabled:true\nhttp.cors.allow-origin:"*"'
+
+CMD sh elasticsearch/bin/elasticsearch --quiet & kibana/bin/kibana --host 0.0.0.0 -Q & node_modules/.bin/http-server elasticsearch-head/_site -p 9100
 
 
 EXPOSE 9200 5601 9100
