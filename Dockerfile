@@ -1,4 +1,7 @@
-FROM node:alpine
+# 注意：这里的 node 版本要和 kibana 的内置 node 版本一致
+# 比如 kibana 5.5.1 的 node 版本是 6.11.1
+
+FROM node:6.11.1-alpine
 
 LABEL maintainer "Yuhang Ge <abeyuhang@gmail.com>"
 
@@ -48,6 +51,10 @@ RUN git clone --depth=1 https://github.com/mobz/elasticsearch-head.git
 RUN echo $'\n\nhttp.host: 0.0.0.0\nhttp.cors.enabled: true\nhttp.cors.allow-origin: "*"\nhttp.cors.allow-headers: Authorization\n' >> elasticsearch/config/elasticsearch.yml
 
 RUN elasticsearch/bin/elasticsearch-plugin install x-pack --batch
+
+RUN rm -f kibana/node/bin/node kibana/node/bin/npm \
+ && ln -s $(which node) kibana/node/bin/node \
+ && ln -s $(which npm) kibana/node/bin/npm
 
 RUN kibana/bin/kibana-plugin install x-pack
 
